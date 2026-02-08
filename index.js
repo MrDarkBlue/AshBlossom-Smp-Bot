@@ -19,8 +19,12 @@ client.once("ready", () => {
 client.on("guildMemberAdd", async (member) => {
     const roleID = "1469894967924359190"; 
     const welcomeChannelID = "1468326917055844394"; 
-    // VERDİĞİN EMOJİ ID (Başına a koyduk çünkü GIF/Hareketli olduğunu belirttik)
-    const welcomeEmoji = "<a:emoji_adi:636690832904290304>"; 
+    
+    // Güneş gözlüklü emoji eklendi
+    const emoji = "😎"; 
+
+    // Yeni Discord sisteminde kullanıcı adını (tag'siz) almak için en güvenli yol
+    const cleanName = member.user.globalName || member.user.username;
 
     const role = member.guild.roles.cache.get(roleID);
     if (role) {
@@ -34,8 +38,7 @@ client.on("guildMemberAdd", async (member) => {
     const welcomeEmbed = new EmbedBuilder()
         .setColor("#b33939") 
         .setTitle(`Welcome to AshBlossom SMP!`)
-        // displayName kullanarak en temiz ismi aldık
-        .setDescription(`${welcomeEmoji} Hello **${member.displayName}**!\n\nThanks so much for joining us! Hope you enjoy your time in Beeland!\n\n✨ Check out the rules to start\n✨ Get to know us in introduction`)
+        .setDescription(`${emoji} Hello **${cleanName}**!\n\nThanks so much for joining us! Hope you enjoy your time in Beeland!\n\n✨ Check out the rules to start\n✨ Get to know us in introduction`)
         .setThumbnail(member.user.displayAvatarURL({ forceStatic: false }))
         .setFooter({ text: `You're the ${member.guild.memberCount}. member of the server!` })
         .setTimestamp();
@@ -43,10 +46,4 @@ client.on("guildMemberAdd", async (member) => {
     const channel = member.guild.channels.cache.get(welcomeChannelID);
     if (channel) {
         channel.send({ 
-            content: `Welcome <@${member.id}>!`, 
-            embeds: [welcomeEmbed] 
-        });
-    }
-});
-
-client.login(process.env.BOT_TOKEN);
+            content: `Welcome <@${member.
