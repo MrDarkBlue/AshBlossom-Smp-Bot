@@ -3,14 +3,13 @@ const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers, // Üyeleri takip etmek için şart
+    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages
   ]
 });
 
 client.once("ready", () => {
   console.log(`Bot AshBlossom SMP için hazır: ${client.user.tag}`);
-  
   client.user.setPresence({
     status: "online",
     activities: [{ name: "AshBlossom SMP", type: 0 }] 
@@ -18,27 +17,25 @@ client.once("ready", () => {
 });
 
 client.on("guildMemberAdd", async (member) => {
-    // --- AYARLARIN ---
-    const roleID = "1469894967924359190"; // AshBlossom Rol ID
-    const welcomeChannelID = "1468326917055844394"; // #welcome kanal ID
+    const roleID = "1469894967924359190"; 
+    const welcomeChannelID = "1468326917055844394"; 
+    // VERDİĞİN EMOJİ ID (Başına a koyduk çünkü GIF/Hareketli olduğunu belirttik)
+    const welcomeEmoji = "<a:emoji_adi:636690832904290304>"; 
 
-    // 1. OTOMATİK ROL VERME
     const role = member.guild.roles.cache.get(roleID);
     if (role) {
         try {
             await member.roles.add(role);
-            console.log(`${member.user.username} kullanıcısına rol verildi.`);
         } catch (error) {
-            console.error("Rol verme hatası! Botun rolü yukarıda mı kontrol et.");
+            console.error("Rol verme hatası!");
         }
     }
 
-    // 2. KIRMIZI EMBED MESAJI (İSİM DÜZELTİLDİ)
     const welcomeEmbed = new EmbedBuilder()
-        .setColor("#b33939") // İstediğin o asil kırmızı tonu
+        .setColor("#b33939") 
         .setTitle(`Welcome to AshBlossom SMP!`)
-        // member.user.tag yerine sadece member.user.username kullanarak temiz isim aldık
-        .setDescription(`Hello **${member.user.username}**!\n\nThanks so much for joining us! Hope you enjoy your time in Beeland!\n\n✨ Check out the rules to start\n✨ Get to know us in introduction`)
+        // displayName kullanarak en temiz ismi aldık
+        .setDescription(`${welcomeEmoji} Hello **${member.displayName}**!\n\nThanks so much for joining us! Hope you enjoy your time in Beeland!\n\n✨ Check out the rules to start\n✨ Get to know us in introduction`)
         .setThumbnail(member.user.displayAvatarURL({ forceStatic: false }))
         .setFooter({ text: `You're the ${member.guild.memberCount}. member of the server!` })
         .setTimestamp();
@@ -49,8 +46,6 @@ client.on("guildMemberAdd", async (member) => {
             content: `Welcome <@${member.id}>!`, 
             embeds: [welcomeEmbed] 
         });
-    } else {
-        console.log("Hata: Welcome kanalı bulunamadı Batman, ID'yi kontrol et.");
     }
 });
 
