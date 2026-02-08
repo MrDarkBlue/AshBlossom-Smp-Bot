@@ -16,25 +16,35 @@ client.on("guildMemberAdd", async (member) => {
     const roleID = "1469894967924359190"; 
     const welcomeChannelID = "1468326917055844394"; 
     
-    // Tag'den kurtulmak için en kesin çözüm
+    // Temiz isim (Tag yok)
     const cleanName = member.user.globalName || member.user.username;
 
-    // Rol verme işlemi
+    // Otomatik Rol
     const role = member.guild.roles.cache.get(roleID);
     if (role) { await member.roles.add(role).catch(() => {}); }
 
     const welcomeEmbed = new EmbedBuilder()
         .setColor("#b33939") 
-        // 1. SOL ÜST KÖŞE: Sunucu fotoğrafı ve yanına yazı (Author kısmı)
+        // SOL ÜST KÖŞE: Sunucu ikonu ve "welcome İsim!" yazısı
         .setAuthor({ 
             name: `welcome ${cleanName}!`, 
             iconURL: member.guild.iconURL({ dynamic: true }) 
         })
-        // 2. ORTA KISIM: Büyük Hello yazısı
-        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **AshBlossom**!\n\n✨ check out the <#RULES_ID> to start\n✨ get to know us in <#INTRO_ID>`)
-        // 3. SAĞ TARAF: Kullanıcının profil fotoğrafı
+        // ORTA KISIM: Büyük Hello ve içerik
+        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **Beeland**!\n\n✦ check out the <#KURALLAR_ID> to start\n✦ get to know us in <#TANITIM_ID>`)
+        // SAĞ TARAF: Kullanıcı resmi
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-        // 4. EN ALTI: Emoji ve üye sayısı
+        // EN ALTI: Üye sayısı ve verdiğin o gif/emoji
         .setFooter({ 
             text: `You're the ${member.guild.memberCount}. member of the server!`, 
-            iconURL: "
+            iconURL: "https://cdn.discordapp.com/emojis/636690832904290304.gif" 
+        });
+
+    const channel = member.guild.channels.cache.get(welcomeChannelID);
+    if (channel) {
+        // Üstteki @etiketi sildim, sadece embed gidiyor
+        channel.send({ embeds: [welcomeEmbed] });
+    }
+});
+
+client.login(process.env.BOT_TOKEN);
