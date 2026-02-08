@@ -14,6 +14,17 @@ const client = new Client({
 
 client.once("ready", () => {
   console.log(`Bot giriş yaptı: ${client.user.tag}`);
+
+  // BOTU ZORLA ONLINE GÖSTER
+  client.user.setPresence({
+    status: "online",
+    activities: [
+      {
+        name: "Bee SMP",
+        type: 0 // PLAYING
+      }
+    ]
+  });
 });
 
 client.login(process.env.BOT_TOKEN);
