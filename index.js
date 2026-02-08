@@ -31,7 +31,7 @@ client.on("guildMemberAdd", async (member) => {
             iconURL: member.guild.iconURL({ dynamic: true }) 
         })
         // ORTA KISIM: Büyük Hello ve içerik
-        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **Beeland**!\n\n✦ check out the <#KURALLAR_ID> to start\n✦ get to know us in <#TANITIM_ID>`)
+        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **Beeland**!\n\n✦ check out the <#1468291421671919871> to start\n✦ get to know us in <#1468313543014355118>`)
         // SAĞ TARAF: Kullanıcı resmi
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
         // EN ALTI: Üye sayısı ve verdiğin o gif/emoji
