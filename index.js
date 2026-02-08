@@ -20,30 +20,34 @@ client.on("guildMemberAdd", async (member) => {
     const roleID = "1469894967924359190"; 
     const welcomeChannelID = "1468326917055844394"; 
     
-    // Güneş gözlüklü emoji eklendi
-    const emoji = "😎"; 
+    // Standart emoji kullanıyoruz çünkü botun diğer sunucuda yetkisi yok
+    const coolEmoji = "😎"; 
 
-    // Yeni Discord sisteminde kullanıcı adını (tag'siz) almak için en güvenli yol
-    const cleanName = member.user.globalName || member.user.username;
+    // İsimden #0 veya #1234 kısmını tamamen kazıyan kesin yöntem
+    const cleanName = member.user.globalName || member.user.username.split('#')[0];
 
     const role = member.guild.roles.cache.get(roleID);
     if (role) {
-        try {
-            await member.roles.add(role);
-        } catch (error) {
-            console.error("Rol verme hatası!");
-        }
+        try { await member.roles.add(role); } catch (e) { console.error("Rol hatası"); }
     }
 
     const welcomeEmbed = new EmbedBuilder()
         .setColor("#b33939") 
         .setTitle(`Welcome to AshBlossom SMP!`)
-        .setDescription(`${emoji} Hello **${cleanName}**!\n\nThanks so much for joining us! Hope you enjoy your time in Beeland!\n\n✨ Check out the rules to start\n✨ Get to know us in introduction`)
+        // İsim kalınlaştırıldı (Hello **İsim**!)
+        .setDescription(`Hello **${cleanName}**!\n\nThanks so much for joining us! Hope you enjoy your time in Beeland!\n\n✨ Check out the rules to start\n✨ Get to know us in introduction`)
         .setThumbnail(member.user.displayAvatarURL({ forceStatic: false }))
-        .setFooter({ text: `You're the ${member.guild.memberCount}. member of the server!` })
+        // Emoji burada, üye sayısının yanına (en alta) taşındı
+        .setFooter({ text: `${coolEmoji} You're the ${member.guild.memberCount}. member of the server!` })
         .setTimestamp();
 
     const channel = member.guild.channels.cache.get(welcomeChannelID);
     if (channel) {
         channel.send({ 
-            content: `Welcome <@${member.
+            content: `Welcome <@${member.id}>!`, 
+            embeds: [welcomeEmbed] 
+        });
+    }
+});
+
+client.login(process.env.BOT_TOKEN);
