@@ -1,6 +1,9 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 
 console.log("BOT DOSYASI ÇALIŞTI");
+console.log("BOT_TOKEN:", process.env.BOT_TOKEN);
+console.log("TYPEOF TOKEN:", typeof process.env.BOT_TOKEN);
+console.log("TOKEN LENGTH:", process.env.BOT_TOKEN?.length);
 
 const client = new Client({
   intents: [
@@ -11,29 +14,6 @@ const client = new Client({
 
 client.once("ready", () => {
   console.log(`Bot giriş yaptı: ${client.user.tag}`);
-});
-
-client.on("guildMemberAdd", async (member) => {
-  console.log("GUILD MEMBER ADD TETİKLENDİ:", member.user.tag);
-
-  const roleId = process.env.AUTO_ROLE_ID;
-  if (!roleId) {
-    console.log("AUTO_ROLE_ID YOK");
-    return;
-  }
-
-  const role = member.guild.roles.cache.get(roleId);
-  if (!role) {
-    console.log("ROL BULUNAMADI");
-    return;
-  }
-
-  try {
-    await member.roles.add(role);
-    console.log("ROL VERİLDİ:", role.name);
-  } catch (err) {
-    console.error("ROL VERME HATASI:", err);
-  }
 });
 
 client.login(process.env.BOT_TOKEN);
