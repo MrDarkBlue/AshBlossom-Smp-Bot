@@ -27,7 +27,7 @@ client.on("guildMemberAdd", async (member) => {
         .setColor("#b33939") 
         // SOL ÜST KÖŞE: Sunucu ikonu ve "welcome İsim!" yazısı
         .setAuthor({ 
-            name: `welcome ${cleanName}!`, 
+            name: `Welcome ${cleanName}!`, 
             iconURL: member.guild.iconURL({ dynamic: true }) 
         })
         // ORTA KISIM: Büyük Hello ve içerik
