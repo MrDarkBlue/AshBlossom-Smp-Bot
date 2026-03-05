@@ -112,19 +112,19 @@ client.on("interactionCreate", async (interaction) => {
     if (!interaction.isButton()) return;
 
     const roleMap = {
-        "role_java": "ID_YAZ",
-        "role_bedrock": "ID_YAZ",
-        "role_africa": "ID_YAZ",
-        "role_asia": "ID_YAZ",
-        "role_australia": "ID_YAZ",
-        "role_europe": "ID_YAZ",
-        "role_na": "ID_YAZ",
-        "role_sa": "ID_YAZ",
-        "role_dm_open": "ID_YAZ",
-        "role_dm_closed": "ID_YAZ",
-        "role_ping_smp": "ID_YAZ",
-        "role_ping_zoralis": "ID_YAZ",
-        "role_ping_events": "ID_YAZ"
+        "role_java": "1469501206568243223",
+        "role_bedrock": "1469505125713449071",
+        "role_africa": "1469505470556405832",
+        "role_asia": "1469505600634224926",
+        "role_australia": "1469505692057731265",
+        "role_europe": "1469505342135205928",
+        "role_na": "1469505519197753599",
+        "role_sa": "1469505638676693127",
+        "role_dm_open": "1469506558315462726",
+        "role_dm_closed": "1469506608286662716",
+        "role_ping_smp": "1469506068093734942",
+        "role_ping_zoralis": "1469506221760450685",
+        "role_ping_events": "1469506341344383069"
     };
 
     const roleID = roleMap[interaction.customId];
