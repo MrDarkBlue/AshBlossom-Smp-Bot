@@ -30,7 +30,7 @@ client.on("guildMemberAdd", async (member) => {
             name: `Welcome ${cleanName}!`, 
             iconURL: member.guild.iconURL({ dynamic: true }) 
         })
-        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **AshBlossom Smp**!\n\n✦ check out the <#1468291421671919871> to start`)
+        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **AshBlossom Smp**!\n\n✦✦ Check out the <#1468291421671919871> to get started.\n\n✦ To begin your journey, head over to <#12345123124> and pick your roles!`)
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
         .setFooter({ 
             text: `You're the ${member.guild.memberCount}. member of the server!`, 
