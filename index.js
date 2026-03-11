@@ -1,11 +1,9 @@
-const { Client, GatewayIntentBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent // Mesaj komutlarını okuyabilmesi için bu şart
+    GatewayIntentBits.GuildMembers
   ]
 });
 
@@ -13,24 +11,27 @@ client.once("ready", () => {
   console.log(`AshBlossom Bot Aktif!`);
 });
 
-// --- 1. BÖLÜM: KARŞILAMA SİSTEMİ (Welcome) ---
+// --- KARŞILAMA VE OTOMATİK ROL ---
 client.on("guildMemberAdd", async (member) => {
-    const roleID = "1469894967924359190"; 
-    const welcomeChannelID = "1468326917055844394"; 
-    
+    const roleID = "1469894967924359190"; // Verilecek rol ID
+    const welcomeChannelID = "1468326917055844394"; // Welcome kanalı
+
     const cleanName = member.user.globalName || member.user.username;
 
     // Otomatik Rol Verme
     const role = member.guild.roles.cache.get(roleID);
-    if (role) { await member.roles.add(role).catch(() => {}); }
+    if (role) { 
+        await member.roles.add(role).catch(console.error); 
+    }
 
+    // Welcome Mesajı
     const welcomeEmbed = new EmbedBuilder()
-        .setColor("#b33939") 
+        .setColor("#b33939")
         .setAuthor({ 
             name: `Welcome ${cleanName}!`, 
             iconURL: member.guild.iconURL({ dynamic: true }) 
         })
-        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **AshBlossom Smp**!\n\n✦ Check out the <#1468291421671919871> to get started.\n\n✦ To begin your journey, head over to <#1478923121473093764> and pick your roles!`)
+        .setDescription(`## Hello, ${cleanName}!\n\nThanks so much for joining us! Hope you enjoy your time in **AshBlossom Smp**!\n\n✦ Check out the <#1468291421671919871> to get started.`)
         .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
         .setFooter({ 
             text: `You're the ${member.guild.memberCount}. member of the server!`, 
@@ -39,106 +40,7 @@ client.on("guildMemberAdd", async (member) => {
 
     const channel = member.guild.channels.cache.get(welcomeChannelID);
     if (channel) {
-        channel.send({ embeds: [welcomeEmbed] });
-    }
-});
-
-// --- 2. BÖLÜM: ROL SEÇİM MESAJLARINI GÖNDERME (!setup-roles) ---
-client.on("messageCreate", async (message) => {
-    if (message.content === "!setup-roles" && message.member.permissions.has("Administrator")) {
-        
-        // Version Embed
-        const embedVersion = new EmbedBuilder()
-            .setColor("#0099ff")
-            .setTitle("🎮 Game Version")
-            .setDescription("## Which version are you playing on?\n\nPlease select your platform to get started.");
-        
-        const rowVersion = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId("role_java").setLabel("Java").setStyle(ButtonStyle.Primary),
-            new ButtonBuilder().setCustomId("role_bedrock").setLabel("Bedrock").setStyle(ButtonStyle.Primary)
-        );
-
-        // Region Embed
-        const embedRegion = new EmbedBuilder()
-            .setColor("#0099ff")
-            .setTitle("🌍 Region")
-            .setDescription("## What region are you from?\n\nSelect your continent for better connection.");
-
-        const rowRegionA = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId("role_africa").setLabel("Africa").setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId("role_asia").setLabel("Asia").setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId("role_australia").setLabel("Australia").setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId("role_europe").setLabel("Europe").setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId("role_na").setLabel("North America").setStyle(ButtonStyle.Secondary)
-        );
-        const rowRegionB = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId("role_sa").setLabel("South America").setStyle(ButtonStyle.Secondary)
-        );
-
-        // DMs Embed
-        const embedDMs = new EmbedBuilder()
-            .setColor("#0099ff")
-            .setTitle("📩 Direct Messages")
-            .setDescription("## Are your DMs open?\n\nLet others know if you're open to PMs.");
-
-        const rowDMs = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId("role_dm_open").setLabel("DMs Open").setStyle(ButtonStyle.Success),
-            new ButtonBuilder().setCustomId("role_dm_closed").setLabel("DMs Closed").setStyle(ButtonStyle.Danger)
-        );
-
-        // Pings Embed
-        const embedPings = new EmbedBuilder()
-            .setColor("#0099ff")
-            .setTitle("🔔 Notifications")
-            .setDescription("## Which pings you want to receive?\n\nChoose your notification topics.");
-
-        const rowPings = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId("role_ping_smp").setLabel("SMP").setStyle(ButtonStyle.Primary),
-            new ButtonBuilder().setCustomId("role_ping_zoralis").setLabel("Zoralis").setStyle(ButtonStyle.Primary),
-            new ButtonBuilder().setCustomId("role_ping_events").setLabel("Events").setStyle(ButtonStyle.Primary)
-        );
-
-        await message.channel.send({ embeds: [embedVersion], components: [rowVersion] });
-        await message.channel.send({ embeds: [embedRegion], components: [rowRegionA, rowRegionB] });
-        await message.channel.send({ embeds: [embedDMs], components: [rowDMs] });
-        await message.channel.send({ embeds: [embedPings], components: [rowPings] });
-        
-        message.delete().catch(() => {}); 
-    }
-});
-
-// --- 3. BÖLÜM: BUTONLARA TIKLANDIĞINDA ROL VERME ---
-client.on("interactionCreate", async (interaction) => {
-    if (!interaction.isButton()) return;
-
-    const roleMap = {
-        "role_java": "1469501206568243223",
-        "role_bedrock": "1469505125713449071",
-        "role_africa": "1469505470556405832",
-        "role_asia": "1469505600634224926",
-        "role_australia": "1469505692057731265",
-        "role_europe": "1469505342135205928",
-        "role_na": "1469505519197753599",
-        "role_sa": "1469505638676693127",
-        "role_dm_open": "1469506558315462726",
-        "role_dm_closed": "1469506608286662716",
-        "role_ping_smp": "1469506068093734942",
-        "role_ping_zoralis": "1469506221760450685",
-        "role_ping_events": "1469506341344383069"
-    };
-
-    const roleID = roleMap[interaction.customId];
-    if (!roleID || roleID === "ID_YAZ") return interaction.reply({ content: "Role ID is not set up correctly!", ephemeral: true });
-
-    const role = interaction.guild.roles.cache.get(roleID);
-    if (!role) return interaction.reply({ content: "Role not found in this server!", ephemeral: true });
-
-    if (interaction.member.roles.cache.has(roleID)) {
-        await interaction.member.roles.remove(role);
-        return interaction.reply({ content: `Removed: **${role.name}**`, ephemeral: true });
-    } else {
-        await interaction.member.roles.add(role);
-        return interaction.reply({ content: `Added: **${role.name}**`, ephemeral: true });
+        channel.send({ embeds: [welcomeEmbed] }).catch(console.error);
     }
 });
 
