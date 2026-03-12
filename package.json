@@ -1,18 +1,14 @@
 {
   "name": "ashblossom-smp-bot",
   "version": "1.0.0",
-  "description": "Auto role Discord bot with invite verification",
+  "description": "Auto role Discord bot",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
-    "express": "^4.18.2",
-    "dotenv": "^16.3.1",
     "node-fetch": "^3.3.1"
-  },
-  "engines": {
-    "node": ">=18"
   }
 }
