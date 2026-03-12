@@ -1,3 +1,6 @@
+// -----------------------------
+// MEVCUT BOT KODUN
+// -----------------------------
 const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
 
 const client = new Client({
@@ -37,4 +40,48 @@ client.on("guildMemberAdd", async (member) => {
     }
 });
 
+// -----------------------------
+// CAPTCHA + TEK SEFERLİK INVITE SİSTEMİ
+// -----------------------------
+const express = require('express');
+const fetch = require('node-fetch');
+const app = express();
+app.use(express.json());
+
+// Verify endpoint
+app.post('/verify', async (req, res) => {
+  const captcha = req.body.captcha;
+
+  // Google reCAPTCHA doğrulama
+  const secret = process.env.RECAPTCHA_SECRET;
+  const verification = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `secret=${secret}&response=${captcha}`
+  });
+  const captchaResult = await verification.json();
+
+  if(!captchaResult.success){
+    return res.json({success: false});
+  }
+
+  try {
+    // Discord tek seferlik invite oluştur
+    const guild = await client.guilds.fetch(process.env.GUILD_ID);
+    const channel = guild.channels.cache.get(process.env.INVITE_CHANNEL_ID);
+    const invite = await channel.createInvite({ maxUses: 1, unique: true, maxAge: 86400 });
+
+    res.json({success: true, invite: invite.url});
+  } catch(err) {
+    console.error(err);
+    res.json({success: false});
+  }
+});
+
+// Express server başlat
+app.listen(process.env.PORT || 3000, () => console.log('Verification server running...'));
+
+// -----------------------------
+// BOT LOGIN
+// -----------------------------
 client.login(process.env.BOT_TOKEN);
