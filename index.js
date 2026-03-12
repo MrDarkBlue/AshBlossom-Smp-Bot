@@ -11,18 +11,11 @@ client.once("ready", () => {
   console.log(`AshBlossom Bot Aktif!`);
 });
 
-// --- KARŞILAMA VE OTOMATİK ROL ---
+// --- KARŞILAMA MESAJI ---
 client.on("guildMemberAdd", async (member) => {
-    const roleID = "1469894967924359190"; // Verilecek rol ID
     const welcomeChannelID = "1468326917055844394"; // Welcome kanalı
 
     const cleanName = member.user.globalName || member.user.username;
-
-    // Otomatik Rol Verme
-    const role = member.guild.roles.cache.get(roleID);
-    if (role) { 
-        await member.roles.add(role).catch(console.error); 
-    }
 
     // Welcome Mesajı
     const welcomeEmbed = new EmbedBuilder()
