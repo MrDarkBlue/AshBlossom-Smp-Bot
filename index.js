@@ -1,7 +1,9 @@
 // -----------------------------
 // MEVCUT BOT KODUN
 // -----------------------------
-const { Client, GatewayIntentBits, EmbedBuilder } = require("discord.js");
+import { Client, GatewayIntentBits, EmbedBuilder } from "discord.js";
+import express from 'express';
+import fetch from 'node-fetch';
 
 const client = new Client({
   intents: [
@@ -43,8 +45,6 @@ client.on("guildMemberAdd", async (member) => {
 // -----------------------------
 // CAPTCHA + TEK SEFERLİK INVITE SİSTEMİ
 // -----------------------------
-const express = require('express');
-const fetch = require('node-fetch');
 const app = express();
 app.use(express.json());
 
