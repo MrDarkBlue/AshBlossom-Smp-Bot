@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AshblossomSMP Discord Verification</title>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<style>
+  body { font-family: sans-serif; text-align: center; padding-top: 50px; }
+  #discord-link { display: none; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Welcome to AshblossomSMP! 🌸</h1>
+<p>Please complete the captcha below to get your Discord invite.</p>
+
+<form id="captcha-form">
+  <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY_HERE"></div>
+  <br>
+  <button type="submit">Verify</button>
+</form>
+
+<div id="discord-link">
+  <p>Congratulations! ✅ Your verification is complete.</p>
+  <a id="invite-link" href="#" target="_blank">Join the Discord Server</a>
+</div>
+
+<script>
+const form = document.getElementById('captcha-form');
+const discordLink = document.getElementById('discord-link');
+const inviteAnchor = document.getElementById('invite-link');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const response = grecaptcha.getResponse();
+  if(response.length === 0){
+    alert("Please complete the captcha!");
+    return;
+  }
+
+  const res = await fetch('/verify', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({captcha: response})
+  });
+
+  const data = await res.json();
+  if(data.success){
+    form.style.display = "none";
+    inviteAnchor.href = data.invite;
+    discordLink.style.display = "block";
+  } else {
+    alert("Captcha verification failed. Try again.");
+  }
+});
+</script>
+</body>
+</html>
