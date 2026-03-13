@@ -16,13 +16,25 @@ client.once("ready", () => {
   console.log(`AshBlossom Bot Aktif!`);
 });
 
-// --- KARŞILAMA MESAJI ---
+// --- KARŞILAMA MESAJI + OTOMATİK ROL ---
 client.on("guildMemberAdd", async (member) => {
+
+    const roleID = "1469894967924359190"; // Member rolü
     const welcomeChannelID = "1468326917055844394"; // Welcome kanalı
 
     const cleanName = member.user.globalName || member.user.username;
 
-    // Welcome Mesajı
+    // --- OTOMATİK ROL VERME ---
+    try {
+        const role = member.guild.roles.cache.get(roleID);
+        if (role) {
+            await member.roles.add(role);
+        }
+    } catch (err) {
+        console.error("Rol verilemedi:", err);
+    }
+
+    // --- WELCOME MESAJI ---
     const welcomeEmbed = new EmbedBuilder()
         .setColor("#b33939")
         .setAuthor({ 
@@ -52,13 +64,13 @@ app.use(express.json());
 app.post('/verify', async (req, res) => {
   const captcha = req.body.captcha;
 
-  // Google reCAPTCHA doğrulama
   const secret = process.env.RECAPTCHA_SECRET;
   const verification = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: `secret=${secret}&response=${captcha}`
   });
+
   const captchaResult = await verification.json();
 
   if(!captchaResult.success){
@@ -66,7 +78,6 @@ app.post('/verify', async (req, res) => {
   }
 
   try {
-    // Discord tek seferlik invite oluştur
     const guild = await client.guilds.fetch(process.env.GUILD_ID);
     const channel = guild.channels.cache.get(process.env.INVITE_CHANNEL_ID);
     const invite = await channel.createInvite({ maxUses: 1, unique: true, maxAge: 86400 });
@@ -78,7 +89,7 @@ app.post('/verify', async (req, res) => {
   }
 });
 
-// Express server başlat
+// Express server
 app.listen(process.env.PORT || 3000, () => console.log('Verification server running...'));
 
 // -----------------------------
