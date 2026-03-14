@@ -19,7 +19,7 @@ client.once("ready", () => {
 // --- KARŞILAMA MESAJI + OTOMATİK ROL ---
 client.on("guildMemberAdd", async (member) => {
 
-    const roleID = "1469894967924359190"; // Member rolü
+    const roleID = "1482397689365794950"; // Member rolü
     const welcomeChannelID = "1468326917055844394"; // Welcome kanalı
 
     const cleanName = member.user.globalName || member.user.username;
